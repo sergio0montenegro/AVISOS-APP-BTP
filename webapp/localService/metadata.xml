@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZPM_CATALOG_MAINT_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <EntityType Name="ZPM_Entity_Catalogo" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Aviso"/>
+                </Key>
+                <Property Name="Aufnr" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Order"/>
+                <Property Name="Aviso" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Notification"/>
+                <Property Name="Fecha" Type="Edm.DateTime" Precision="0" sap:unicode="false" sap:label="Notif. Date"/>
+                <Property Name="Iloan" Type="Edm.String" MaxLength="12" sap:unicode="false" sap:label="Loc/AccAssmt"/>
+                <Property Name="Equnr" Type="Edm.String" MaxLength="18" sap:unicode="false" sap:label="Equipment"/>
+                <Property Name="Invnr" Type="Edm.String" MaxLength="25" sap:unicode="false" sap:label="Inventory No."/>
+                <Property Name="Eqart" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Object Type"/>
+                <Property Name="Part_obj" Type="Edm.String" MaxLength="8" sap:unicode="false"/>
+                <Property Name="Mod_falla" Type="Edm.String" MaxLength="8" sap:unicode="false"/>
+                <Property Name="Causa" Type="Edm.String" MaxLength="8" sap:unicode="false"/>
+                <Property Name="Cost_material" Type="Edm.String" MaxLength="23" sap:unicode="false"/>
+                <Property Name="Cost_srv" Type="Edm.String" MaxLength="23" sap:unicode="false"/>
+                <Property Name="Est_ord" Type="Edm.String" MaxLength="40" sap:unicode="false" sap:label="System status"/>
+                <Property Name="Sowrk" Type="Edm.String" MaxLength="4" sap:unicode="false" sap:label="Location Plant"/>
+                <Property Name="Zzsistema" Type="Edm.String" MaxLength="40" sap:unicode="false"/>
+                <Property Name="Zzsubsistema" Type="Edm.String" MaxLength="40" sap:unicode="false"/>
+                <NavigationProperty Name="NavCatalogToCost" Relationship="ZPM_CATALOG_MAINT_SRV.ACatalogToCost" FromRole="FromRole_ACatalogToCost" ToRole="ToRole_ACatalogToCost"/>
+            </EntityType>
+            <EntityType Name="ZPM_Entity_Costo" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Aviso"/>
+                </Key>
+                <Property Name="Aviso" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Notification" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Twaer" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Trans. Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="Cost_Serv" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="2" sap:unicode="false" sap:unit="Twaer" sap:label="Value TranCurr" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Cost_Mat" Type="Edm.Decimal" Nullable="false" Precision="24" Scale="2" sap:unicode="false" sap:unit="Twaer" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Aufnr" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Order" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <Association Name="ACatalogToCost" sap:content-version="1">
+                <End Type="ZPM_CATALOG_MAINT_SRV.ZPM_Entity_Catalogo" Multiplicity="1" Role="FromRole_ACatalogToCost"/>
+                <End Type="ZPM_CATALOG_MAINT_SRV.ZPM_Entity_Costo" Multiplicity="1" Role="ToRole_ACatalogToCost"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_ACatalogToCost">
+                        <PropertyRef Name="Aviso"/>
+                    </Principal>
+                    <Dependent Role="ToRole_ACatalogToCost">
+                        <PropertyRef Name="Aviso"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="ZPM_CATALOG_MAINT_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ZPM_Entity_CatalogoSet" EntityType="ZPM_CATALOG_MAINT_SRV.ZPM_Entity_Catalogo" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="ZPM_Entity_CostoSet" EntityType="ZPM_CATALOG_MAINT_SRV.ZPM_Entity_Costo" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <AssociationSet Name="ACatalogToCostSet" Association="ZPM_CATALOG_MAINT_SRV.ACatalogToCost" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ZPM_Entity_CatalogoSet" Role="FromRole_ACatalogToCost"/>
+                    <End EntitySet="ZPM_Entity_CostoSet" Role="ToRole_ACatalogToCost"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="https://basds4.sap.grupohada.com:44300/sap/opu/odata/sap/ZPM_CATALOG_MAINT_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://basds4.sap.grupohada.com:44300/sap/opu/odata/sap/ZPM_CATALOG_MAINT_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
